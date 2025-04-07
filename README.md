@@ -33,7 +33,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  animated_bloc: ^0.1.0
+  animated_bloc: ^0.0.1
 ```
 
 Then run:
@@ -67,6 +67,7 @@ class CounterPage extends StatelessWidget {
             return Text(
               '$count',
               style: const TextStyle(fontSize: 64),
+              key: ValueKey(count), // Important: Add key for proper animations
             );
           },
         ),
@@ -98,6 +99,7 @@ AnimatedBlocConsumer<CounterCubit, int>(
     return Text(
       '$count',
       style: const TextStyle(fontSize: 64),
+      key: ValueKey(count), // Important: Add key for proper animations
     );
   },
 ),
@@ -122,7 +124,11 @@ AnimatedBlocBuilder<ThemeCubit, ThemeState>(
     );
   },
   builder: (context, themeState) {
-    return SomeWidget(theme: themeState.theme);
+    // Important: Add key based on theme state for proper animations
+    return SomeWidget(
+      key: ValueKey(themeState.hashCode),
+      theme: themeState.theme,
+    );
   },
 ),
 ```
@@ -138,16 +144,46 @@ AnimatedBlocBuilder<DataCubit, DataState>(
   duration: const Duration(milliseconds: 400),
   builder: (context, state) {
     return switch (state) {
-      DataInitial() => const InitialMessageWidget(),
-      DataLoading() => const LoadingSpinnerWidget(),
-      DataError(message: final message) => ErrorWidget(message: message),
-      DataLoaded(data: final items) => DataListView(items: items),
+      DataInitial() => const InitialMessageWidget(key: ValueKey('initial')),
+      DataLoading() => const LoadingSpinnerWidget(key: ValueKey('loading')),
+      DataError(message: final message) => ErrorWidget(
+          key: ValueKey('error_$message'),
+          message: message,
+        ),
+      DataLoaded(data: final items) => DataListView(
+          key: ValueKey('loaded_${items.hashCode}'),
+          items: items,
+        ),
     };
   },
 ),
 ```
 
 This creates smooth, animated transitions between your different screens or states, providing a more polished user experience.
+
+### Important: Using Keys for Proper Animations
+
+To ensure proper animations when transitioning between different widgets or the same widget with different data, you **must** provide unique keys to your widgets:
+
+```dart
+// For different states, use descriptive keys
+switch (state) {
+  case InitialState(): return Widget(key: ValueKey('initial'));
+  case LoadingState(): return Widget(key: ValueKey('loading'));
+  case ErrorState(): return Widget(key: ValueKey('error'));
+}
+
+// For states with data, include the data in the key
+return ItemWidget(
+  key: ValueKey('item_${item.id}'), // Use unique data in the key
+  item: item,
+);
+```
+
+**Why keys are important:**
+- AnimatedBlocBuilder uses AnimatedSwitcher internally, which needs keys to identify when widgets change
+- Without keys, widgets may not animate correctly or at all
+- ValueKey is recommended for most cases, but UniqueKey can also be used if you want to force animations on every rebuild
 
 ## Available Transition Types
 

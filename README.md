@@ -32,7 +32,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  animated_bloc: ^0.1.0
+  animated_bloc: ^0.0.1
 ```
 
 Then run:

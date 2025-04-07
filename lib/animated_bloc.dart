@@ -8,7 +8,7 @@ enum StateTransitionType { scale, slide, fade, custom }
 class AnimatedBlocBuilder<B extends StateStreamable<S>, S>
     extends StatelessWidget {
   const AnimatedBlocBuilder({
-    required this.bloc,
+    this.bloc,
     required this.builder,
     this.duration = const Duration(milliseconds: 300),
     this.transitionType = StateTransitionType.scale,
@@ -22,7 +22,7 @@ class AnimatedBlocBuilder<B extends StateStreamable<S>, S>
        );
 
   /// The bloc that manages the state
-  final B bloc;
+  final B? bloc;
 
   /// Builder for creating a widget based on the current state
   final Widget Function(BuildContext context, S state) builder;
@@ -93,7 +93,7 @@ class AnimatedBlocBuilder<B extends StateStreamable<S>, S>
 class AnimatedBlocConsumer<B extends StateStreamable<S>, S>
     extends StatelessWidget {
   const AnimatedBlocConsumer({
-    required this.bloc,
+    this.bloc,
     required this.builder,
     required this.listener,
     this.duration = const Duration(milliseconds: 300),
@@ -109,7 +109,7 @@ class AnimatedBlocConsumer<B extends StateStreamable<S>, S>
        );
 
   /// The bloc that manages the state
-  final B bloc;
+  final B? bloc;
 
   /// Builder for creating a widget based on the current state
   final Widget Function(BuildContext context, S state) builder;

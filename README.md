@@ -13,11 +13,11 @@ and the Flutter guide for
 
 # Animated BLoC
 
-A Flutter package that provides widgets for animated transitions between BLoC states with various animation types.
+A Flutter package that provides widgets for animated transitions between BLoC states with various animation types. This is a simple wrapper around the `flutter_bloc` package that adds beautiful animations to state transitions.
 
 ## Features
 
-- Easily add beautiful animations when your BLoC state changes
+- Easily add animations when your BLoC state changes
 - Four transition types:
   - Scale with fade
   - Slide with fade
@@ -25,6 +25,7 @@ A Flutter package that provides widgets for animated transitions between BLoC st
   - Custom animations
 - Works with any BLoC that implements `StateStreamable<State>`
 - Includes both `AnimatedBlocBuilder` and `AnimatedBlocConsumer` variants
+- Smooth transitions between different states (loading, error, success, etc.)
 
 ## Getting Started
 
@@ -32,7 +33,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  animated_bloc: ^0.0.1
+  animated_bloc: ^0.1.0
 ```
 
 Then run:
@@ -126,6 +127,28 @@ AnimatedBlocBuilder<ThemeCubit, ThemeState>(
 ),
 ```
 
+### Handling Different States with Animations
+
+This package is particularly useful when transitioning between different states of your application, such as loading, error, and success states:
+
+```dart
+AnimatedBlocBuilder<DataCubit, DataState>(
+  bloc: dataCubit,
+  transitionType: StateTransitionType.fade,
+  duration: const Duration(milliseconds: 400),
+  builder: (context, state) {
+    return switch (state) {
+      DataInitial() => const InitialMessageWidget(),
+      DataLoading() => const LoadingSpinnerWidget(),
+      DataError(message: final message) => ErrorWidget(message: message),
+      DataLoaded(data: final items) => DataListView(items: items),
+    };
+  },
+),
+```
+
+This creates smooth, animated transitions between your different screens or states, providing a more polished user experience.
+
 ## Available Transition Types
 
 - `StateTransitionType.scale` - Scale animation with fade-in
@@ -139,6 +162,33 @@ Both `AnimatedBlocBuilder` and `AnimatedBlocConsumer` support all the same param
 
 - `buildWhen` - Controls when to rebuild the widget
 - `listenWhen` - (For Consumer only) Controls when to trigger the listener callback
+
+## Limitations
+
+### Using with Slivers
+
+When using `AnimatedBlocBuilder` or `AnimatedBlocConsumer` inside a `CustomScrollView` or other sliver context, you must wrap them in a `SliverToBoxAdapter`:
+
+```dart
+CustomScrollView(
+  slivers: [
+    SliverAppBar(
+      title: Text('My App'),
+    ),
+    SliverToBoxAdapter(
+      child: AnimatedBlocBuilder<MyCubit, MyState>(
+        bloc: myCubit,
+        builder: (context, state) {
+          return YourWidget();
+        },
+      ),
+    ),
+    // Other slivers...
+  ],
+),
+```
+
+This is because these widgets produce regular box widgets, not sliver widgets.
 
 ## License
 

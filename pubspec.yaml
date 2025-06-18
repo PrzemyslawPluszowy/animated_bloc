@@ -1,6 +1,6 @@
 name: animated_bloc
 description: A Flutter package that provides widgets for animated transitions between BLoC states with various animation types.
-version: 0.0.1
+version: 0.2.0
 homepage: https://github.com/PrzemyslawPluszowy/animated_bloc
 repository: https://github.com/PrzemyslawPluszowy/animated_bloc
 issue_tracker: https://github.com/PrzemyslawPluszowy/animated_bloc/issues
@@ -13,10 +13,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^9.1.0
+  flutter_bloc: ^9.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   bloc_test: ^10.0.0

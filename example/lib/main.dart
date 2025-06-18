@@ -82,22 +82,27 @@ class CounterPage extends StatelessWidget {
         builder: (context, state) {
           return switch (state) {
             CounterInitial() => Center(
-                key: const ValueKey(
-                    'initial'), // key is important you can use UniqueKey() but it will be a new widget every time
-                child: Text(
-                  'Initial',
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+              key: const ValueKey(
+                'initial',
+              ), // key is important you can use UniqueKey() but it will be a new widget every time
+              child: Text(
+                'Initial',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
+            ),
             CounterLoading() => const Center(
-                key: ValueKey('loading'),
-                child: CircularProgressIndicator()), // key is important
+              key: ValueKey('loading'),
+              child: CircularProgressIndicator(),
+            ), // key is important
             CounterLoaded(count: final count) => Center(
-                key: ValueKey('loaded_$count'), // key is important
-                child: Text(count.toString(),
-                    style: Theme.of(context).textTheme.headlineLarge)),
+              key: ValueKey('loaded_$count'), // key is important
+              child: Text(
+                count.toString(),
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+            ),
           };
         },
       ),
